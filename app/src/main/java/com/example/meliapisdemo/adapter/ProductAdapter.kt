@@ -1,6 +1,7 @@
 package com.example.meliapisdemo.adapter
 
 import android.content.Context
+import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,6 +11,7 @@ import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.example.meliapisdemo.R
 import com.example.meliapisdemo.model.Product
+import com.facebook.drawee.view.SimpleDraweeView
 import com.squareup.picasso.Picasso
 
 class ProductAdapter(context: Context?, products: ArrayList<Product>) : RecyclerView.Adapter<ProductAdapter.ViewHolder>(){
@@ -39,13 +41,13 @@ class ProductAdapter(context: Context?, products: ArrayList<Product>) : Recycler
 
         val title = v.findViewById(R.id.title) as TextView
         val price = v.findViewById(R.id.price) as TextView
-        val thumbnail = v.findViewById(R.id.thumbnail) as ImageView
+        val thumbnail = v.findViewById(R.id.thumbnail) as SimpleDraweeView
 
         fun bind(product: Product, context: Context?){
             title.text = product.title
             price.text = "$" + product.price.toString()
-            val picasso = Picasso.get()
-            picasso.load(product.thumbnail).into(thumbnail)
+            val uri: Uri = Uri.parse(product.thumbnail)
+            thumbnail.setImageURI(uri)
             itemView.setOnClickListener(View.OnClickListener { Toast.makeText(context, product.id, Toast.LENGTH_SHORT).show() })
         }
 
