@@ -8,7 +8,7 @@
     <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/background">
+            android:id="@+id/backgroundRecyclerSucc">
 
         <androidx.recyclerview.widget.RecyclerView
                 android:layout_width="match_parent"
@@ -16,6 +16,28 @@
                 android:id="@+id/recyclerProducts">
         </androidx.recyclerview.widget.RecyclerView>
 
+
+    </LinearLayout>
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/errorBackground"
+            android:layout_gravity="center_vertical"
+            android:orientation="vertical">
+        <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/errorImage"
+                android:layout_gravity="center_horizontal"
+        />
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/errorText"
+                android:textSize="20sp"
+                android:layout_gravity="center_horizontal">
+
+        </TextView>
 
     </LinearLayout>
 
