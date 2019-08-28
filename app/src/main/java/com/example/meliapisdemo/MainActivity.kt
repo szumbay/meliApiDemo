@@ -58,7 +58,7 @@ class MainActivity : AppCompatActivity() {
                         putString("query", query)
                     }
                 }
-                transaction.add(R.id.content, fragment)
+                transaction.replace(R.id.content, fragment)
                 transaction.commit()
             }
         }
