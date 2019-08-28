@@ -2,5 +2,6 @@
     <string name="app_name">MeLiApisDemo</string>
     <string name="search_hint">Busca en Mercado Libre</string>
     <string name="title_activity_searchable">SearchableActivity</string>
-    <string name="PRODUCT_LIST">productList</string>
+    <string name="SEARCH_SUCCESS">searchsuccess</string>
+    <string name="SEARCH_ERROR">searcherror</string>
 </resources>

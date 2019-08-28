@@ -38,7 +38,7 @@ class SearchFragment : Fragment() {
 
     fun fetchProducts(){
         productViewModel = ViewModelProviders.of(this).get(ProductViewModel::class.java)
-        productViewModel.getProductRepository("iphone 7").observe(this, Observer { productResponse ->
+        productViewModel.getProductRepository("iphone x").observe(this, Observer { productResponse ->
             when(productResponse){
                 is ProductResponse.Success -> handleSuccess(productResponse.productDTO.getProducts())
                 is ProductResponse.Error -> handleException(productResponse.cause)
@@ -58,7 +58,6 @@ class SearchFragment : Fragment() {
 
     fun handleException(error: ErrorType){
         backgroundRecyclerSucc.apply { backgroundRecyclerSucc.visibility = View.GONE }
-        errorImage.setImageResource(R.drawable.error)
         if (error == NETWORK) {
             errorImage.setImageResource(R.drawable.error)
             errorText.text = "No hay conexion a internet"
