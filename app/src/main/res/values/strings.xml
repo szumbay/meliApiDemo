@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">MeLiApisDemo</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
+    <string name="search_hint">Busca en Mercado Libre</string>
+    <string name="title_activity_searchable">SearchableActivity</string>
+    <string name="PRODUCT_LIST">productList</string>
 </resources>

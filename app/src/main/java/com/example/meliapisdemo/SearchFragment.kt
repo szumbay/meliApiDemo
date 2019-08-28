@@ -28,8 +28,18 @@ class SearchFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         productAdapter= ProductAdapter(view.context,products)
         super.onViewCreated(view, savedInstanceState)
+        var list = arguments?.getSerializable(resources.getString(R.string.PRODUCT_LIST)) as List<Product>
+        recyclerProducts.apply {
+            layoutManager = LinearLayoutManager(activity)
+            adapter = productAdapter
+        }
+        products.addAll(list)
+        productAdapter.notifyDataSetChanged()
+    }
+
+    fun fetchProducts(){
         productViewModel = ViewModelProviders.of(this).get(ProductViewModel::class.java)
-        productViewModel.getProductRepository().observe(this, Observer { productResponse ->
+        productViewModel.getProductReposioryFromSearch("iphone 7").observe(this, Observer { productResponse ->
             var products1 :List<Product> = productResponse.getProducts()
             products.addAll(products1)
             productAdapter.notifyDataSetChanged()
@@ -38,7 +48,7 @@ class SearchFragment : Fragment() {
             layoutManager = LinearLayoutManager(activity)
             adapter = productAdapter
         }
-
     }
+
 
 }

@@ -3,7 +3,6 @@ package com.example.meliapisdemo.networking
 import com.example.meliapisdemo.model.ProductResponse
 import retrofit2.Call
 import retrofit2.http.GET
-import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface ProductApi {

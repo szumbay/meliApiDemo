@@ -16,19 +16,19 @@ object ProductRepository {
 
     fun getProducts(search: String) : MutableLiveData<ProductResponse> {
 
-        val newsData = MutableLiveData<ProductResponse>()
+        val productsData = MutableLiveData<ProductResponse>()
 
         productApi.getProductList(search).enqueue(object : Callback<ProductResponse>{
 
             override fun onFailure(call: Call<ProductResponse>, t: Throwable) {
-                newsData.postValue(null)
+                productsData.postValue(null)
             }
 
             override fun onResponse(call: Call<ProductResponse>, response: Response<ProductResponse>) {
-                if (response.isSuccessful) newsData.postValue(response.body())
+                if (response.isSuccessful) productsData.postValue(response.body())
             }
         })
-        return newsData
+        return productsData
     }
 
 }
