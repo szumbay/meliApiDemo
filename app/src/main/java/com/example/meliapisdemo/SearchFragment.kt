@@ -11,8 +11,13 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.meliapisdemo.adapter.ProductAdapter
 import com.example.meliapisdemo.model.Product
+import com.example.meliapisdemo.model.ProductResponse
+import com.example.meliapisdemo.utils.ErrorType
+import com.example.meliapisdemo.utils.ErrorType.*
 import com.example.meliapisdemo.viewmodel.ProductViewModel
 import kotlinx.android.synthetic.main.fragment_search.*
+import kotlinx.android.synthetic.main.fragment_search.errorBackground
+import kotlinx.android.synthetic.main.fragment_search.view.*
 
 class SearchFragment : Fragment() {
 
@@ -28,26 +33,43 @@ class SearchFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         productAdapter= ProductAdapter(view.context,products)
         super.onViewCreated(view, savedInstanceState)
-        var list = arguments?.getSerializable(resources.getString(R.string.PRODUCT_LIST)) as List<Product>
-        recyclerProducts.apply {
-            layoutManager = LinearLayoutManager(activity)
-            adapter = productAdapter
-        }
-        products.addAll(list)
-        productAdapter.notifyDataSetChanged()
+        fetchProducts()
     }
 
     fun fetchProducts(){
         productViewModel = ViewModelProviders.of(this).get(ProductViewModel::class.java)
-        productViewModel.getProductReposioryFromSearch("iphone 7").observe(this, Observer { productResponse ->
-            var products1 :List<Product> = productResponse.getProducts()
-            products.addAll(products1)
-            productAdapter.notifyDataSetChanged()
+        productViewModel.getProductRepository("iphone 7").observe(this, Observer { productResponse ->
+            when(productResponse){
+                is ProductResponse.Success -> handleSuccess(productResponse.productDTO.getProducts())
+                is ProductResponse.Error -> handleException(productResponse.cause)
+            }
         })
+    }
+
+    fun handleSuccess(list: List<Product>){
+        errorBackground.apply { errorBackground.visibility = View.GONE }
+        products.addAll(list)
+        productAdapter.notifyDataSetChanged()
         recyclerProducts.apply {
             layoutManager = LinearLayoutManager(activity)
             adapter = productAdapter
         }
+    }
+
+    fun handleException(error: ErrorType){
+        backgroundRecyclerSucc.apply { backgroundRecyclerSucc.visibility = View.GONE }
+        errorImage.setImageResource(R.drawable.error)
+        if (error == NETWORK) {
+            errorImage.setImageResource(R.drawable.error)
+            errorText.text = "No hay conexion a internet"
+        }
+        else if (error == CLIENT){
+            errorImage.setImageResource(R.drawable.errornotfound)
+            errorText.text = "Busqueda sin resultados"
+        }
+        else if (error == SERVER) errorImage.setImageResource(R.drawable.errorserver)
+        else errorImage.setImageResource(R.drawable.errorserver)
+
     }
 
 
