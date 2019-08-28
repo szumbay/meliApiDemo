@@ -33,12 +33,13 @@ class SearchFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         productAdapter= ProductAdapter(view.context,products)
         super.onViewCreated(view, savedInstanceState)
-        fetchProducts()
+        var query = arguments!!.getString("query")
+        fetchProducts(query!!)
     }
 
-    fun fetchProducts(){
+    fun fetchProducts(query: String){
         productViewModel = ViewModelProviders.of(this).get(ProductViewModel::class.java)
-        productViewModel.getProductRepository("iphone x").observe(this, Observer { productResponse ->
+        productViewModel.getProductRepository(query).observe(this, Observer { productResponse ->
             when(productResponse){
                 is ProductResponse.Success -> handleSuccess(productResponse.productDTO.getProducts())
                 is ProductResponse.Error -> handleException(productResponse.cause)

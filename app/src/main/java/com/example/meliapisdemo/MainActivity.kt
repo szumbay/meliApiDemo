@@ -19,10 +19,16 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         var toolbar = findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
-        var supportManager: FragmentManager = supportFragmentManager
-        val transaction = supportManager.beginTransaction()
-        transaction.add(R.id.content,SearchFragment())
+        supportFragmentManager.popBackStack()
+        var transaction = supportFragmentManager.beginTransaction()
+        var fragment = SearchFragment().apply {
+            arguments = Bundle().apply {
+                putString("query", "iphone")
+            }
+        }
+        transaction.add(R.id.content,fragment)
         transaction.commit()
+        handleIntent(intent)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -49,7 +55,14 @@ class MainActivity : AppCompatActivity() {
     private fun handleIntent(intent: Intent) {
         if (Intent.ACTION_SEARCH == intent.action) {
             intent.getStringExtra(SearchManager.QUERY)?.also { query ->
-
+                var transaction = supportFragmentManager.beginTransaction()
+                var fragment = SearchFragment().apply {
+                    arguments = Bundle().apply {
+                        putString("query", query)
+                    }
+                }
+                transaction.add(R.id.content, fragment)
+                transaction.commit()
             }
         }
     }
