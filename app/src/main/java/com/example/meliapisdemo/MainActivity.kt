@@ -20,7 +20,7 @@ class MainActivity : AppCompatActivity() {
         var transaction = supportFragmentManager.beginTransaction()
         var fragment = SearchFragment().apply {
             arguments = Bundle().apply {
-                putString("query", "iphone")
+                putString("query", MyApplication.prefs.lastSearch())
             }
         }
         transaction.add(R.id.content,fragment)
@@ -52,6 +52,7 @@ class MainActivity : AppCompatActivity() {
     private fun handleIntent(intent: Intent) {
         if (Intent.ACTION_SEARCH == intent.action) {
             intent.getStringExtra(SearchManager.QUERY)?.also { query ->
+                MyApplication.prefs.lastSearch(query)
                 var transaction = supportFragmentManager.beginTransaction()
                 var fragment = SearchFragment().apply {
                     arguments = Bundle().apply {
