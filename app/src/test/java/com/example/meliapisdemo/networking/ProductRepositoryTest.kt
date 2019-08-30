@@ -8,21 +8,20 @@ import org.mockito.Mockito
 
 class ProductRepositoryTest {
 
-    private lateinit var mockRetrofitService: RetrofitService
 
 
     @Before
-    fun setUp(){
-
-    }
+    fun setUp(){}
 
 
     @Test
-    fun whenSearchIsCompletedWithSuccess_returnProductResponsewithValidDTO(){
-        mockRetrofitService = Mockito.mock(RetrofitService::class.java)
+    fun whenSearchIsCompletedWithSuccess_returnProductResponseWithValidDTO(){
+        val mockRetrofitService = Mockito.spy(RetrofitService())
         Mockito.`when`(mockRetrofitService .createService(ProductApi::class.java)).thenReturn(ApiProductMock(true,true))
+
         ProductRepository.productApi = mockRetrofitService.createService(ProductApi::class.java)
         val productResponseLiveData = ProductRepository.getProducts("iphone")
+
         Assert.assertEquals(ProductResponse.Success::class.java, productResponseLiveData.value)
     }
 
