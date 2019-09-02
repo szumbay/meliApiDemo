@@ -14,18 +14,17 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        var toolbar = findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar)
+        val toolbar = findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
         supportFragmentManager.popBackStack()
-        var transaction = supportFragmentManager.beginTransaction()
-        var fragment = SearchFragment().apply {
+        val transaction = supportFragmentManager.beginTransaction()
+        val fragment = SearchFragment().apply {
             arguments = Bundle().apply {
                 putString("query", MyApplication.prefs.lastSearch())
             }
         }
         transaction.add(R.id.content,fragment)
         transaction.commit()
-        handleIntent(intent)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -53,8 +52,8 @@ class MainActivity : AppCompatActivity() {
         if (Intent.ACTION_SEARCH == intent.action) {
             intent.getStringExtra(SearchManager.QUERY)?.also { query ->
                 MyApplication.prefs.lastSearch(query)
-                var transaction = supportFragmentManager.beginTransaction()
-                var fragment = SearchFragment().apply {
+                val transaction = supportFragmentManager.beginTransaction()
+                val fragment = SearchFragment().apply {
                     arguments = Bundle().apply {
                         putString("query", query)
                     }

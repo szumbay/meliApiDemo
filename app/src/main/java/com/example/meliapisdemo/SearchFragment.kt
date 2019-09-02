@@ -1,6 +1,7 @@
 package com.example.meliapisdemo
 
 
+import android.content.Context
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -23,7 +24,8 @@ class SearchFragment : Fragment() {
 
     private var productViewModel: ProductViewModel = ProductViewModel()
     private val products: ArrayList<Product> = ArrayList()
-    private var productAdapter: ProductAdapter = ProductAdapter(context, products)
+    private var productAdapter = ProductAdapter(context, products)
+
 
 
     override fun onCreateView( inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -31,13 +33,12 @@ class SearchFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        productAdapter= ProductAdapter(view.context,products)
         super.onViewCreated(view, savedInstanceState)
-        var query = arguments!!.getString("query")
+        val query = arguments!!.getString("query")
         fetchProducts(query!!)
     }
 
-    fun fetchProducts(query: String){
+    private fun fetchProducts(query: String){
         productViewModel = ViewModelProviders.of(this).get(ProductViewModel::class.java)
         productViewModel.getProductRepository(query).observe(this, Observer { productResponse ->
             when(productResponse){
@@ -47,8 +48,8 @@ class SearchFragment : Fragment() {
         })
     }
 
-    fun handleSuccess(list: List<Product>){
-        errorBackground.apply { errorBackground.visibility = View.GONE }
+    private fun handleSuccess(list: List<Product>){
+        errorBackground.apply { visibility = View.GONE }
         products.addAll(list)
         productAdapter.notifyDataSetChanged()
         recyclerProducts.apply {
@@ -57,8 +58,8 @@ class SearchFragment : Fragment() {
         }
     }
 
-    fun handleException(error: ErrorType){
-        backgroundRecyclerSucc.apply { backgroundRecyclerSucc.visibility = View.GONE }
+    private fun handleException(error: ErrorType){
+        recyclerProducts.apply { visibility = View.GONE }
         if (error == NETWORK) {
             errorImage.setImageResource(R.drawable.error)
             errorText.text = "No hay conexion a internet"

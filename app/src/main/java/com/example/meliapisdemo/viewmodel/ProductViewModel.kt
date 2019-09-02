@@ -8,15 +8,11 @@ import com.example.meliapisdemo.networking.ProductRepository
 
 class ProductViewModel : ViewModel() {
 
-    var mutableLiveData: MutableLiveData<ProductResponse>
-    val productRepository = ProductRepository
-
-    init {
-        mutableLiveData = MutableLiveData()
-    }
+    private var mutableLiveData: MutableLiveData<ProductResponse> = MutableLiveData()
+    private val productRepository = ProductRepository
 
     fun getProductRepository(search: String): MutableLiveData<ProductResponse> {
-        mutableLiveData = productRepository.getProducts(search)
+        productRepository.getProducts(search, mutableLiveData)
         return mutableLiveData
     }
 }

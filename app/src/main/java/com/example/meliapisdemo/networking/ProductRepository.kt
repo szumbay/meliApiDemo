@@ -13,26 +13,23 @@ object ProductRepository {
 
     var productApi = RetrofitService().createService(ProductApi::class.java)
 
-    fun getProducts(search: String) : MutableLiveData<ProductResponse>{
-
-        val productsData = MutableLiveData<ProductResponse>()
+    fun getProducts(search: String, productLiveData: MutableLiveData<ProductResponse>){
 
         productApi.getProductList(search).enqueue(object : Callback<ProductDTO>{
 
             override fun onFailure(call: Call<ProductDTO>, t: Throwable) {
-                var errorType = getErrorType(t)
-                productsData.postValue(ProductResponse.Error(errorType))
+                val errorType = getErrorType(t)
+                productLiveData.postValue(ProductResponse.Error(errorType))
             }
 
             override fun onResponse(call: Call<ProductDTO>, DTO: Response<ProductDTO>) {
-                var sizeList = DTO.body()!!.getProducts().size
-                if (DTO.isSuccessful && sizeList >= 1) productsData.postValue(ProductResponse.Success(DTO.body()!!))
-                    else if (sizeList == 0 ) productsData.postValue(ProductResponse.Error(ErrorType.CLIENT))
+                val sizeList = DTO.body()!!.getProducts().size
+                if (DTO.isSuccessful && sizeList >= 1) productLiveData.postValue(ProductResponse.Success(DTO.body()!!))
+                    else if (sizeList == 0 ) productLiveData.postValue(ProductResponse.Error(ErrorType.CLIENT))
                 else
-                    productsData.postValue(ProductResponse.Error(getErrorType(DTO.code())))
+                    productLiveData.postValue(ProductResponse.Error(getErrorType(DTO.code())))
             }
         })
-        return productsData
     }
 
 
