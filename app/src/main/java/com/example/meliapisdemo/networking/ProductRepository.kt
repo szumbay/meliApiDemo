@@ -23,9 +23,12 @@ object ProductRepository {
             }
 
             override fun onResponse(call: Call<ProductDTO>, DTO: Response<ProductDTO>) {
-                val sizeList = DTO.body()!!.getProducts().size
-                if (DTO.isSuccessful && sizeList >= 1) productLiveData.postValue(ProductResponse.Success(DTO.body()!!))
-                    else if (sizeList == 0 ) productLiveData.postValue(ProductResponse.Error(ErrorType.CLIENT))
+                if (DTO.isSuccessful && DTO.body()!!.getProducts().isNotEmpty()){
+                    productLiveData.postValue(ProductResponse.Success(DTO.body()!!))
+                }
+                else if (DTO.isSuccessful && DTO.body()!!.getProducts().isEmpty()) {
+                    productLiveData.postValue(ProductResponse.Error(ErrorType.CLIENT))
+                }
                 else
                     productLiveData.postValue(ProductResponse.Error(getErrorType(DTO.code())))
             }

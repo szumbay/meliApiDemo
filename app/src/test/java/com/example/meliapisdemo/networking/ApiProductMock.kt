@@ -2,10 +2,13 @@ package com.example.meliapisdemo.networking
 
 import com.example.meliapisdemo.model.Product
 import com.example.meliapisdemo.model.ProductDTO
+import okhttp3.MediaType
 import okhttp3.Request
+import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.io.IOException
 
 class ApiProductMock(private val success: Boolean,
                      private val validRequest: Boolean) : ProductApi {
@@ -22,8 +25,11 @@ class ApiProductMock(private val success: Boolean,
                 when {
                     success && validRequest -> callback.onResponse(this, Response.success(getProductDTO(true)))
                     success && !validRequest -> callback.onResponse(this, Response.success(getProductDTO(false)))
-                    !success && !validRequest -> callback.onFailure(this, Throwable())
-                    !success -> callback.onFailure(this, Throwable())
+                    !success && !validRequest -> callback.onFailure(this, IOException())
+                    !success && validRequest -> callback.onResponse(this, Response.error(500, ResponseBody.create(
+                                MediaType.parse("application/json"),
+                                "{\"key\":[\"somestuff\"]}"
+                            )))
                 }
             }
 
