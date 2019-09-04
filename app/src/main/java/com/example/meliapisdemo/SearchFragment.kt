@@ -24,7 +24,7 @@ class SearchFragment : Fragment() {
 
     private var productViewModel: ProductViewModel = ProductViewModel()
     private val products: ArrayList<Product> = ArrayList()
-    private var productAdapter = ProductAdapter(context, products)
+    private lateinit var productAdapter : ProductAdapter
 
 
 
@@ -36,6 +36,11 @@ class SearchFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         val query = arguments!!.getString("query")
         fetchProducts(query!!)
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        productAdapter = ProductAdapter(context!!,products)
+        super.onActivityCreated(savedInstanceState)
     }
 
     private fun fetchProducts(query: String){

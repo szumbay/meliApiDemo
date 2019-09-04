@@ -14,7 +14,7 @@ import com.example.meliapisdemo.model.Product
 import com.facebook.drawee.view.SimpleDraweeView
 import com.squareup.picasso.Picasso
 
-class ProductAdapter(private val context: Context?, private val products: ArrayList<Product>) : RecyclerView.Adapter<ProductAdapter.ViewHolder>(){
+class ProductAdapter(private val context: Context, private val products: ArrayList<Product>) : RecyclerView.Adapter<ProductAdapter.ViewHolder>(){
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {

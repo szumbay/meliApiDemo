@@ -4,6 +4,7 @@
           package="com.example.meliapisdemo">
 
     <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.READ_USER_DICTIONARY"/>
 
     <application
             android:name=".MyApplication"
@@ -33,7 +34,10 @@
         </activity>
         <meta-data android:name="android.app.default_searchable"
                    android:value=".MainActivity" />
-
+        <provider
+                android:name=".provider.ProductSearchProvider"
+                android:authorities="com.example.meliapisdemo.provider"
+                android:exported="false"/>
     </application>
 
 </manifest>

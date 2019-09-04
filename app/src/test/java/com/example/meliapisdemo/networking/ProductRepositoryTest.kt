@@ -5,7 +5,6 @@ import androidx.lifecycle.MutableLiveData
 import com.example.meliapisdemo.model.ProductResponse
 import com.example.meliapisdemo.utils.ErrorType
 import org.junit.Assert
-import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.mockito.Mockito
@@ -14,9 +13,6 @@ class ProductRepositoryTest {
 
     @get:Rule
     val rule = InstantTaskExecutorRule()
-
-    @Before
-    fun setUp(){}
 
 
     @Test

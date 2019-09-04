@@ -3,12 +3,10 @@ package com.example.meliapisdemo.model
 import com.google.gson.annotations.SerializedName
 import java.io.Serializable
 
-class ProductDTO(@SerializedName("query") val query: String, results: List<Product>) : Serializable{
-
-    @SerializedName("results") val result: List<Product> = results
+class ProductDTO(@SerializedName("query") val query: String, @SerializedName("results") val results: List<Product>) : Serializable{
 
     fun getProducts(): List<Product> {
-        return result
+        return results
     }
 
 }

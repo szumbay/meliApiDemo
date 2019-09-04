@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.view.SearchEvent
 
 class MainActivity : AppCompatActivity() {
 
@@ -59,6 +60,21 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
                 transaction.replace(R.id.content, fragment)
+                transaction.addToBackStack("backFragment")
+                transaction.commit()
+            }
+        }
+        if(Intent.ACTION_VIEW == intent.action){
+            intent.dataString?.also {
+                MyApplication.prefs.lastSearch(it)
+                val transaction = supportFragmentManager.beginTransaction()
+                val fragment = SearchFragment().apply {
+                    arguments = Bundle().apply {
+                        putString("query", it)
+                    }
+                }
+                transaction.replace(R.id.content, fragment)
+                transaction.addToBackStack("backFragment")
                 transaction.commit()
             }
         }

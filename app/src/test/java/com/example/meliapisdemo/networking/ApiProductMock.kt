@@ -12,6 +12,9 @@ import java.io.IOException
 
 class ApiProductMock(private val success: Boolean,
                      private val validRequest: Boolean) : ProductApi {
+    override fun getSuggestionList(suggestion: String) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
 
 
     override fun getProductList(search: String): Call<ProductDTO> {
