@@ -1,3 +1,4 @@
+
 package com.example.meliapisdemo.networking
 
 import androidx.lifecycle.MutableLiveData
@@ -9,11 +10,11 @@ import retrofit2.Response
 object SuggestionRepository {
     var productApi = RetrofitService().createService(ProductApi::class.java)
 
-    lateinit var callFrom : Call<SuggestionDTO>
+    var callFrom : Call<SuggestionDTO>? = null
 
     fun cancelCall(){
-        if(!callFrom.isExecuted){
-            callFrom.cancel()
+        callFrom?.apply {
+            if (!this.isExecuted) this.cancel()
         }
     }
 
@@ -22,11 +23,10 @@ object SuggestionRepository {
         productApi.getSuggestionList(search).enqueue(object : Callback<SuggestionDTO> {
 
             override fun onFailure(call: Call<SuggestionDTO>, t: Throwable) {
-                callFrom = call
+
             }
 
             override fun onResponse(call: Call<SuggestionDTO>, DTO: Response<SuggestionDTO>) {
-                callFrom = call
                 if (DTO.isSuccessful)suggestionsLiveData.postValue(DTO.body())
             }
         })

@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.SearchEvent
+import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
 
@@ -15,13 +16,15 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        val lastSearch =  MyApplication.prefs.lastSearch()
         val toolbar = findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar)
+        toolbar.title = lastSearch
         setSupportActionBar(toolbar)
         supportFragmentManager.popBackStack()
         val transaction = supportFragmentManager.beginTransaction()
         val fragment = SearchFragment().apply {
             arguments = Bundle().apply {
-                putString("query", MyApplication.prefs.lastSearch())
+                putString("query",lastSearch)
             }
         }
         transaction.add(R.id.content,fragment)
@@ -52,6 +55,7 @@ class MainActivity : AppCompatActivity() {
     private fun handleIntent(intent: Intent) {
         if (Intent.ACTION_SEARCH == intent.action) {
             intent.getStringExtra(SearchManager.QUERY)?.also { query ->
+                toolbar.title = query
                 MyApplication.prefs.lastSearch(query)
                 val transaction = supportFragmentManager.beginTransaction()
                 val fragment = SearchFragment().apply {
@@ -66,6 +70,7 @@ class MainActivity : AppCompatActivity() {
         }
         if(Intent.ACTION_VIEW == intent.action){
             intent.dataString?.also {
+                toolbar.title = it
                 MyApplication.prefs.lastSearch(it)
                 val transaction = supportFragmentManager.beginTransaction()
                 val fragment = SearchFragment().apply {

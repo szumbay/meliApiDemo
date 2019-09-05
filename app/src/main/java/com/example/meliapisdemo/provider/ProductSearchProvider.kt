@@ -6,12 +6,19 @@ import android.content.UriMatcher
 import android.database.Cursor
 import android.net.Uri
 import android.app.SearchManager
+import android.content.Context
 import android.database.MatrixCursor
+import android.os.Bundle
 import android.view.animation.Transformation
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.Transformations
+import androidx.loader.app.LoaderManager
+import androidx.loader.content.CursorLoader
+import androidx.loader.content.Loader
+import com.example.meliapisdemo.MainActivity
+import com.example.meliapisdemo.MyApplication
 import com.example.meliapisdemo.model.Product
 import com.example.meliapisdemo.model.Suggestion
 import com.example.meliapisdemo.model.SuggestionDTO
@@ -38,35 +45,33 @@ class ProductSearchProvider : ContentProvider() {
         return null
     }
 
+
+
     override fun query(uri: Uri, p1: Array<String>?, p2: String?, p3: Array<String>?, p4: String?): Cursor? {
 
         if (uriMatcher.match(uri) == 2){
             val query = uri.lastPathSegment?.toLowerCase()
-            val cursor = query?.let { getSearchSuggestionResultCursor(it) }
+
+            val cursor = query?.let {
+                var suggestionLiveData = MutableLiveData<SuggestionDTO>()
+                SuggestionRepository.getSuggestion(it, suggestionLiveData)
+                val matrixCursor = MatrixCursor(matrixCursorColumns)
+                val mRow = arrayOfNulls<Any>(3)
+                var counterId = 0
+                Thread.sleep(300)
+
+                suggestionLiveData.value?.suggestions?.apply {
+                    for (sugg in this){
+                        mRow[0] = "" + counterId++
+                        mRow[1] = sugg.query
+                        mRow[2] = sugg.query
+                        matrixCursor.addRow(mRow)
+                    }
+                }
+                matrixCursor
+            }
             return cursor
         } else return null
-    }
-
-    private fun getSearchSuggestionResultCursor(searchSuggestion: String) : MatrixCursor {
-        var suggestionLiveData = MutableLiveData<SuggestionDTO>()
-        SuggestionRepository.getSuggestion(searchSuggestion, suggestionLiveData)
-        val matrixCursor = MatrixCursor(matrixCursorColumns)
-        val mRow = arrayOfNulls<Any>(3)
-        var counterId = 0
-        searchSuggestion.toLowerCase()
-
-        Thread.sleep(300)
-
-        suggestionLiveData.value?.suggestions?.apply {
-            for (sugg in this){
-                mRow[0] = "" + counterId++
-                mRow[1] = sugg.query
-                mRow[2] = sugg.query
-                matrixCursor.addRow(mRow)
-            }
-        }
-
-        return matrixCursor
     }
 
     override fun onCreate(): Boolean {
@@ -84,4 +89,6 @@ class ProductSearchProvider : ContentProvider() {
     override fun getType(uri: Uri): String? {
         return null
     }
+
+
 }
