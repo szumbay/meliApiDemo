@@ -7,11 +7,10 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import android.view.SearchEvent
+import com.example.meliapisdemo.model.Product
 import kotlinx.android.synthetic.main.activity_main.*
 
-class MainActivity : AppCompatActivity() {
-
+class MainActivity : AppCompatActivity(), SearchFragment.Comunicator {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -83,5 +82,18 @@ class MainActivity : AppCompatActivity() {
                 transaction.commit()
             }
         }
+    }
+
+    override fun sendProduct(product: Product) {
+        toolbar.title = "Producto"
+        val transaction = supportFragmentManager.beginTransaction()
+        val fragment = DetailFragment().apply {
+            arguments = Bundle().apply {
+                putString("productId", product.id)
+            }
+        }
+        transaction.replace(R.id.content, fragment)
+        transaction.addToBackStack("backFragment")
+        transaction.commit()
     }
 }

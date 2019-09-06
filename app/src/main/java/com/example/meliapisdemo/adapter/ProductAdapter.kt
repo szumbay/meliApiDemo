@@ -14,7 +14,9 @@ import com.example.meliapisdemo.model.Product
 import com.facebook.drawee.view.SimpleDraweeView
 import com.squareup.picasso.Picasso
 
-class ProductAdapter(private val context: Context, private val products: ArrayList<Product>) : RecyclerView.Adapter<ProductAdapter.ViewHolder>(){
+class ProductAdapter(private val context: Context, private val products: ArrayList<Product>,
+                     private val comunicator: Comunicator) : RecyclerView.Adapter<ProductAdapter.ViewHolder>(){
+
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -29,25 +31,28 @@ class ProductAdapter(private val context: Context, private val products: ArrayLi
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = products[position]
         holder.bind(item, context)
+        holder.view.setOnClickListener {
+            comunicator.sendProduct(item)
+        }
     }
-
 
     class ViewHolder(v : View) : RecyclerView.ViewHolder(v){
 
+        val view = v
         val title = v.findViewById(R.id.title) as TextView
         val price = v.findViewById(R.id.price) as TextView
         val thumbnail = v.findViewById(R.id.thumbnail) as SimpleDraweeView
 
-        fun bind(product: Product, context: Context?){
+        fun bind(product: Product, context: Context?) {
             title.text = product.title
             price.text = "$" + product.price.toString()
             val uri: Uri = Uri.parse(product.thumbnail)
             thumbnail.setImageURI(uri)
-            itemView.setOnClickListener(View.OnClickListener { Toast.makeText(context, product.id, Toast.LENGTH_SHORT).show() })
         }
+    }
 
-
-
+    interface Comunicator {
+        fun sendProduct(product: Product)
     }
 }
 

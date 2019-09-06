@@ -20,7 +20,7 @@ import kotlinx.android.synthetic.main.fragment_search.*
 import kotlinx.android.synthetic.main.fragment_search.errorBackground
 import kotlinx.android.synthetic.main.fragment_search.view.*
 
-class SearchFragment : Fragment() {
+class SearchFragment : Fragment(), ProductAdapter.Comunicator{
 
     private var productViewModel: ProductViewModel = ProductViewModel()
     private val products: ArrayList<Product> = ArrayList()
@@ -39,7 +39,7 @@ class SearchFragment : Fragment() {
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
-        productAdapter = ProductAdapter(context!!,products)
+        productAdapter = ProductAdapter(context!!,products,this)
         super.onActivityCreated(savedInstanceState)
     }
 
@@ -76,6 +76,17 @@ class SearchFragment : Fragment() {
         else if (error == SERVER) errorImage.setImageResource(R.drawable.errorserver)
         else errorImage.setImageResource(R.drawable.errorserver)
 
+    }
+
+    override fun sendProduct(product: Product) {
+
+        val comunicator = context as Comunicator
+
+        comunicator.sendProduct(product)
+    }
+
+    interface Comunicator{
+        fun sendProduct(product: Product)
     }
 
 
