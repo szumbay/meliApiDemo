@@ -1,4 +1,4 @@
-package com.example.meliapisdemo.networking
+package com.example.meliapisdemo.networking.api
 
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory

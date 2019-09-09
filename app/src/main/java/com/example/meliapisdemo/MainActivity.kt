@@ -7,7 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import com.example.meliapisdemo.model.Product
+import com.example.meliapisdemo.model.product.Product
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity(), SearchFragment.Comunicator {
@@ -44,6 +44,18 @@ class MainActivity : AppCompatActivity(), SearchFragment.Comunicator {
             }
         }
         return super.onOptionsItemSelected(item)
+    }
+    override fun sendProduct(product: Product) {
+        toolbar.title = "Producto"
+        val transaction = supportFragmentManager.beginTransaction()
+        val fragment = DetailFragment().apply {
+            arguments = Bundle().apply {
+                putString("productId", product.id)
+            }
+        }
+        transaction.replace(R.id.content, fragment)
+        transaction.addToBackStack("backFragment")
+        transaction.commit()
     }
 
     override fun onNewIntent(intent: Intent) {
@@ -84,16 +96,5 @@ class MainActivity : AppCompatActivity(), SearchFragment.Comunicator {
         }
     }
 
-    override fun sendProduct(product: Product) {
-        toolbar.title = "Producto"
-        val transaction = supportFragmentManager.beginTransaction()
-        val fragment = DetailFragment().apply {
-            arguments = Bundle().apply {
-                putString("productId", product.id)
-            }
-        }
-        transaction.replace(R.id.content, fragment)
-        transaction.addToBackStack("backFragment")
-        transaction.commit()
-    }
+
 }

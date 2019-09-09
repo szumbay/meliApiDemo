@@ -1,7 +1,8 @@
 package com.example.meliapisdemo.networking
 
-import com.example.meliapisdemo.model.Product
-import com.example.meliapisdemo.model.ProductDTO
+import com.example.meliapisdemo.model.product.Product
+import com.example.meliapisdemo.model.product.ProductDTO
+import com.example.meliapisdemo.networking.api.ProductApi
 import okhttp3.MediaType
 import okhttp3.Request
 import okhttp3.ResponseBody
@@ -60,10 +61,10 @@ class ApiProductMock(private val success: Boolean,
             }
         }
     }
-    fun getProductDTO(isSuccess:Boolean) : ProductDTO{
+    fun getProductDTO(isSuccess:Boolean) : ProductDTO {
         val successList =  ArrayList<Product>()
-        successList.add(Product("test","test","test",2.3))
-        if (isSuccess) return ProductDTO("iphone",successList)
+        successList.add(Product("test", "test", "test", 2.3))
+        if (isSuccess) return ProductDTO("iphone", successList)
         else return ProductDTO("iphone", ArrayList<Product>())
     }
 

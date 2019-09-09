@@ -6,24 +6,10 @@ import android.content.UriMatcher
 import android.database.Cursor
 import android.net.Uri
 import android.app.SearchManager
-import android.content.Context
 import android.database.MatrixCursor
-import android.os.Bundle
-import android.view.animation.Transformation
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Observer
-import androidx.lifecycle.Transformations
-import androidx.loader.app.LoaderManager
-import androidx.loader.content.CursorLoader
-import androidx.loader.content.Loader
-import com.example.meliapisdemo.MainActivity
-import com.example.meliapisdemo.MyApplication
-import com.example.meliapisdemo.model.Product
-import com.example.meliapisdemo.model.Suggestion
-import com.example.meliapisdemo.model.SuggestionDTO
-import com.example.meliapisdemo.networking.ProductRepository
-import com.example.meliapisdemo.networking.SuggestionRepository
+import com.example.meliapisdemo.model.suggestion.SuggestionDTO
+import com.example.meliapisdemo.networking.repos.SuggestionRepository
 
 
 class ProductSearchProvider : ContentProvider() {

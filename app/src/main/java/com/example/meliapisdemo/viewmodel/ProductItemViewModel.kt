@@ -1,43 +1,44 @@
 package com.example.meliapisdemo.viewmodel
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Transformations
-import androidx.lifecycle.ViewModel
-import com.example.meliapisdemo.model.Description
-import com.example.meliapisdemo.model.ProductItem
-import com.example.meliapisdemo.networking.DescriptionRepository
-import com.example.meliapisdemo.networking.ProductItemRepository
-import java.net.ProtocolException
+import androidx.lifecycle.*
+import com.example.meliapisdemo.model.productItem.*
+import com.example.meliapisdemo.networking.repos.DescriptionRepository
+import com.example.meliapisdemo.networking.repos.ProductItemRepository
 
 class ProductItemViewModel : ViewModel() {
-    private var productLiveData : MutableLiveData<ProductItem> = MutableLiveData()
-    private var descriptionLiveData : MutableLiveData<Description> = MutableLiveData()
+    var productLiveData : MutableLiveData<ProductItemResponse> = MutableLiveData()
+    var descriptionLiveData : MutableLiveData<DescriptionResponse> = MutableLiveData()
 
 
+    fun getProduct(id: String) : LiveData<ProductDetailResponse>{
 
-    fun getProduct(id: String) : MutableLiveData<ProductItem>{
-        descriptionLiveData = getProductDescription(id)
-        productLiveData = getProductItem(id)
-        val product : LiveData<ProductItem> = Transformations.switchMap(descriptionLiveData){ description ->
-            attachDescription(description, productLiveData)}
-        return product as MutableLiveData<ProductItem>
-
-    }
-
-    fun getProductItem(id: String) : MutableLiveData<ProductItem>{
         ProductItemRepository.getProductItem(id, productLiveData)
-        return productLiveData
-    }
-
-    fun getProductDescription(id: String) : MutableLiveData<Description>{
         DescriptionRepository.getProductDescription(id,descriptionLiveData)
-        return descriptionLiveData
+
+        val mediatorLiveData = MediatorLiveData<ProductDetailResponse>()
+
+        mediatorLiveData.addSource(productLiveData){
+            mediatorLiveData.value = combineLatestData(descriptionLiveData, productLiveData)
+        }
+        mediatorLiveData.addSource(descriptionLiveData){
+            mediatorLiveData.value = combineLatestData(descriptionLiveData, productLiveData)
+        }
+
+        return mediatorLiveData
     }
 
-    fun attachDescription(description: Description, productLiveData: MutableLiveData<ProductItem>) : LiveData<ProductItem>{
-        productLiveData.value?.description = description.description
-        return productLiveData
+    private fun combineLatestData( descriptionResult: LiveData<DescriptionResponse>,
+                                   productItemResult: LiveData<ProductItemResponse>): ProductDetailResponse {
+
+        val description = descriptionResult.value
+        val productItem = productItemResult.value
+
+        // Don't send a response until we have both results
+        if (description == null || productItem == null) {
+            return ProductDetailResponse.Loading("loading data")
+        }
+
+        return ProductDetailResponse.Response(description,productItem)
     }
 
 }

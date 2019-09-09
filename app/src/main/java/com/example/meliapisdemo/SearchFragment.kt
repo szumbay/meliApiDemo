@@ -1,7 +1,6 @@
 package com.example.meliapisdemo
 
 
-import android.content.Context
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -11,14 +10,13 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.meliapisdemo.adapter.ProductAdapter
-import com.example.meliapisdemo.model.Product
-import com.example.meliapisdemo.model.ProductResponse
+import com.example.meliapisdemo.model.product.Product
+import com.example.meliapisdemo.model.product.ProductResponse
 import com.example.meliapisdemo.utils.ErrorType
 import com.example.meliapisdemo.utils.ErrorType.*
 import com.example.meliapisdemo.viewmodel.ProductViewModel
 import kotlinx.android.synthetic.main.fragment_search.*
 import kotlinx.android.synthetic.main.fragment_search.errorBackground
-import kotlinx.android.synthetic.main.fragment_search.view.*
 
 class SearchFragment : Fragment(), ProductAdapter.Comunicator{
 

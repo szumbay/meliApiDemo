@@ -1,8 +1,10 @@
-package com.example.meliapisdemo.networking
+package com.example.meliapisdemo.networking.repos
 
 import androidx.lifecycle.MutableLiveData
-import com.example.meliapisdemo.model.ProductDTO
-import com.example.meliapisdemo.model.ProductResponse
+import com.example.meliapisdemo.model.product.ProductDTO
+import com.example.meliapisdemo.model.product.ProductResponse
+import com.example.meliapisdemo.networking.api.ProductApi
+import com.example.meliapisdemo.networking.api.RetrofitService
 import com.example.meliapisdemo.utils.ErrorType
 import com.example.meliapisdemo.utils.getErrorType
 import retrofit2.Call
@@ -11,7 +13,8 @@ import retrofit2.Response
 
 object ProductRepository {
 
-    var productApi = RetrofitService().createService(ProductApi::class.java)
+    var productApi = RetrofitService()
+        .createService(ProductApi::class.java)
 
     fun getProducts(search: String, productLiveData: MutableLiveData<ProductResponse>){
 

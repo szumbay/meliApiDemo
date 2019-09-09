@@ -1,4 +1,4 @@
-package com.example.meliapisdemo.model
+package com.example.meliapisdemo.model.productItem
 
 import com.google.gson.annotations.SerializedName
 

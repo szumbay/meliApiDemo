@@ -5,14 +5,11 @@ import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.example.meliapisdemo.R
-import com.example.meliapisdemo.model.Product
+import com.example.meliapisdemo.model.product.Product
 import com.facebook.drawee.view.SimpleDraweeView
-import com.squareup.picasso.Picasso
 
 class ProductAdapter(private val context: Context, private val products: ArrayList<Product>,
                      private val comunicator: Comunicator) : RecyclerView.Adapter<ProductAdapter.ViewHolder>(){

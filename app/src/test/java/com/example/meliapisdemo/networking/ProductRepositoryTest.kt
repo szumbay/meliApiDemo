@@ -2,7 +2,10 @@ package com.example.meliapisdemo.networking
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.MutableLiveData
-import com.example.meliapisdemo.model.ProductResponse
+import com.example.meliapisdemo.model.product.ProductResponse
+import com.example.meliapisdemo.networking.api.ProductApi
+import com.example.meliapisdemo.networking.api.RetrofitService
+import com.example.meliapisdemo.networking.repos.ProductRepository
 import com.example.meliapisdemo.utils.ErrorType
 import org.junit.Assert
 import org.junit.Rule

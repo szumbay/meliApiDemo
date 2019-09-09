@@ -1,5 +1,6 @@
-package com.example.meliapisdemo.model
+package com.example.meliapisdemo.model.product
 
+import com.example.meliapisdemo.model.product.Product
 import com.google.gson.annotations.SerializedName
 import java.io.Serializable
 

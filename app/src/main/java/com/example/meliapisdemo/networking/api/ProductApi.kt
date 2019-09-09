@@ -1,6 +1,9 @@
-package com.example.meliapisdemo.networking
+package com.example.meliapisdemo.networking.api
 
-import com.example.meliapisdemo.model.*
+import com.example.meliapisdemo.model.product.ProductDTO
+import com.example.meliapisdemo.model.productItem.Description
+import com.example.meliapisdemo.model.productItem.ProductItem
+import com.example.meliapisdemo.model.suggestion.SuggestionDTO
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Path

@@ -1,14 +1,17 @@
 
-package com.example.meliapisdemo.networking
+package com.example.meliapisdemo.networking.repos
 
 import androidx.lifecycle.MutableLiveData
-import com.example.meliapisdemo.model.SuggestionDTO
+import com.example.meliapisdemo.model.suggestion.SuggestionDTO
+import com.example.meliapisdemo.networking.api.ProductApi
+import com.example.meliapisdemo.networking.api.RetrofitService
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
 object SuggestionRepository {
-    var productApi = RetrofitService().createService(ProductApi::class.java)
+    var productApi = RetrofitService()
+        .createService(ProductApi::class.java)
 
     var callFrom : Call<SuggestionDTO>? = null
 

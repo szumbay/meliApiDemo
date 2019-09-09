@@ -1,4 +1,4 @@
-package com.example.meliapisdemo.model
+package com.example.meliapisdemo.model.product
 
 import com.example.meliapisdemo.utils.ErrorType
 import java.io.Serializable
