@@ -7,19 +7,21 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.meliapisdemo.model.productItem.*
 import com.example.meliapisdemo.utils.ErrorType
 import com.example.meliapisdemo.viewmodel.ProductItemViewModel
+import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_detail.*
 import kotlinx.android.synthetic.main.product_item.title
+import java.text.DecimalFormat
 
 class DetailFragment : Fragment() {
 
     private var productItemViewModel = ProductItemViewModel()
-    private lateinit var productItem : ProductItem
-
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
@@ -63,9 +65,16 @@ class DetailFragment : Fragment() {
     fun handleItemSuccess(productItem: ProductItem){
         title.apply { this.text = productItem.title }
         pictures.apply {
-            var picture = productItem.pictures[0]
-            val uri: Uri = Uri.parse(picture.pictureS)
-            setImageURI(uri)
+            val pic = productItem.pictures[0]
+            Picasso.get().load(pic.pictureS).into(this)
+            val sizes = pic.getDensityPixel(resources.displayMetrics.density.toInt())
+            val lin = LinearLayout.LayoutParams(sizes[0],sizes[1])
+            layoutParams = lin
+        }
+        condition.apply { this.text = productItem.condition }
+        price.apply {
+            val format = DecimalFormat("###,###,##0.00")
+            text = "$ " + format.format(productItem.price)
         }
     }
 
@@ -74,11 +83,11 @@ class DetailFragment : Fragment() {
     }
 
     fun handleItemError(errorType: ErrorType){
-
+        pictures.apply { setImageResource(R.drawable.placeholder) }
+        title.apply{text= "no hay titulo"}
     }
-
     fun handleDescriptionError(errorType: ErrorType){
-
+        description.apply { this.text = "No hay descripción" }
     }
 
 }

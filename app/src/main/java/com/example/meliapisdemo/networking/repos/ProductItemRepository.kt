@@ -25,6 +25,7 @@ object ProductItemRepository {
 
             override fun onResponse(call: Call<ProductItem>, response: Response<ProductItem>) {
                 if (response.isSuccessful) liveData.postValue(ProductItemResponse.Success(response.body()!!))
+                else liveData.postValue(ProductItemResponse.Error(getErrorType(response.code())))
             }
 
         })

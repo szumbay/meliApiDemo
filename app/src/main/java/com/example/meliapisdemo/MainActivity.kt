@@ -30,6 +30,11 @@ class MainActivity : AppCompatActivity(), SearchFragment.Comunicator {
         transaction.commit()
     }
 
+    override fun onBackPressed() {
+        super.onBackPressed()
+        toolbar.title = MyApplication.prefs.lastSearch()
+    }
+
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         val menuInflater = menuInflater
         menuInflater.inflate(R.menu.search_menu, menu)

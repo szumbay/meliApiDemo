@@ -5,6 +5,7 @@ import com.example.meliapisdemo.model.productItem.Description
 import com.example.meliapisdemo.model.productItem.DescriptionResponse
 import com.example.meliapisdemo.networking.api.ProductApi
 import com.example.meliapisdemo.networking.api.RetrofitService
+import com.example.meliapisdemo.utils.ErrorType
 import com.example.meliapisdemo.utils.getErrorType
 import retrofit2.Call
 import retrofit2.Callback
@@ -24,7 +25,11 @@ object DescriptionRepository {
             }
 
             override fun onResponse(call: Call<Description>, response: Response<Description>) {
-                if (response.isSuccessful)liveData.postValue(DescriptionResponse.Success(response.body()!!))
+                if (response.isSuccessful && response.body()?.description!!.isNotEmpty()){
+                    liveData.postValue(DescriptionResponse.Success(response.body()!!))
+                }else if (response.isSuccessful && response.body()?.description!!.isEmpty()){
+                    liveData.postValue(DescriptionResponse.Error(ErrorType.CLIENT))
+                }else liveData.postValue(DescriptionResponse.Error(getErrorType(response.code())))
             }
 
         })

@@ -37,9 +37,10 @@ class SearchFragment : Fragment(), ProductAdapter.Comunicator{
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
-        productAdapter = ProductAdapter(context!!,products,this)
+        productAdapter = ProductAdapter(context!!, products, this)
         super.onActivityCreated(savedInstanceState)
     }
+
 
     private fun fetchProducts(query: String){
         productViewModel = ViewModelProviders.of(this).get(ProductViewModel::class.java)

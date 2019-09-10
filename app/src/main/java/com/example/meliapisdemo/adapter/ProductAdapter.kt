@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.meliapisdemo.R
 import com.example.meliapisdemo.model.product.Product
 import com.facebook.drawee.view.SimpleDraweeView
+import java.text.DecimalFormat
 
 class ProductAdapter(private val context: Context, private val products: ArrayList<Product>,
                      private val comunicator: Comunicator) : RecyclerView.Adapter<ProductAdapter.ViewHolder>(){
@@ -42,7 +43,8 @@ class ProductAdapter(private val context: Context, private val products: ArrayLi
 
         fun bind(product: Product, context: Context?) {
             title.text = product.title
-            price.text = "$" + product.price.toString()
+            val format = DecimalFormat("###,###,##0.00")
+            price.text = "$ " + format.format(product.price)
             val uri: Uri = Uri.parse(product.thumbnail)
             thumbnail.setImageURI(uri)
         }

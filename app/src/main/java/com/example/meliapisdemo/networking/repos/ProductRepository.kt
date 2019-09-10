@@ -26,10 +26,10 @@ object ProductRepository {
             }
 
             override fun onResponse(call: Call<ProductDTO>, DTO: Response<ProductDTO>) {
-                if (DTO.isSuccessful && DTO.body()!!.getProducts().isNotEmpty()){
+                if (DTO.isSuccessful && DTO.body()?.getProducts()!!.isNotEmpty()){
                     productLiveData.postValue(ProductResponse.Success(DTO.body()!!))
                 }
-                else if (DTO.isSuccessful && DTO.body()!!.getProducts().isEmpty()) {
+                else if (DTO.isSuccessful && DTO.body()?.getProducts()!!.isEmpty()) {
                     productLiveData.postValue(ProductResponse.Error(ErrorType.CLIENT))
                 }
                 else

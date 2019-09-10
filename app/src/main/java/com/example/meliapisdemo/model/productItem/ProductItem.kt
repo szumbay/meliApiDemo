@@ -5,6 +5,7 @@ import java.io.Serializable
 
 class ProductItem(
     @SerializedName("id") val id: String,
+    @SerializedName("condition")val condition: String,
     @SerializedName("title") val title: String,
     @SerializedName("pictures") val pictures: List<ProductPicture>,
     @SerializedName("price") val price: Double
