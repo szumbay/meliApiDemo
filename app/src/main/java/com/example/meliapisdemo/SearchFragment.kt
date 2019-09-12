@@ -17,12 +17,14 @@ import com.example.meliapisdemo.utils.ErrorType.*
 import com.example.meliapisdemo.viewmodel.ProductViewModel
 import kotlinx.android.synthetic.main.fragment_search.*
 import kotlinx.android.synthetic.main.fragment_search.errorBackground
+import java.nio.channels.Selector
 
 class SearchFragment : Fragment(), ProductAdapter.Comunicator{
 
     private var productViewModel: ProductViewModel = ProductViewModel()
     private val products: ArrayList<Product> = ArrayList()
     private lateinit var productAdapter : ProductAdapter
+    private lateinit var itemSelector: Selector
 
 
 
@@ -40,7 +42,6 @@ class SearchFragment : Fragment(), ProductAdapter.Comunicator{
         productAdapter = ProductAdapter(context!!, products, this)
         super.onActivityCreated(savedInstanceState)
     }
-
 
     private fun fetchProducts(query: String){
         productViewModel = ViewModelProviders.of(this).get(ProductViewModel::class.java)

@@ -11,28 +11,26 @@
             android:id="@+id/thumbnail"
             android:layout_width="100dp"
             android:layout_height="100dp"
+            android:padding="5dp"
             android:src="@drawable/ic_launcher_foreground"
     />
 
     <TextView
-        android:id="@+id/title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textStyle="bold"
-        android:textSize="20sp"
-        android:layout_alignParentTop="true"
-        android:layout_toRightOf="@+id/thumbnail"
-        android:layout_toEndOf="@+id/thumbnail"
-        tools:text= "dadawdawdwd" />
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:layout_alignParentTop="true"
+            android:layout_toRightOf="@+id/thumbnail"
+            android:layout_toEndOf="@+id/thumbnail"/>
 
     <TextView
         android:id="@+id/price"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="15sp"
+        android:textSize="12sp"
         android:layout_below="@+id/title"
         android:layout_toRightOf="@+id/thumbnail"
-        android:layout_toEndOf="@+id/thumbnail"
-        tools:text = "wdawd"/>
+        android:layout_toEndOf="@+id/thumbnail"/>
 
 </RelativeLayout>

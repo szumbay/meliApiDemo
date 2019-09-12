@@ -7,4 +7,5 @@
     <string name="productPicture">picture of the products</string>
     <string name="description_missing">there is no description</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="description">Descripción</string>
 </resources>

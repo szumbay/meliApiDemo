@@ -8,14 +8,13 @@ import com.example.meliapisdemo.networking.repos.ProductItemRepository
 class ProductItemViewModel : ViewModel() {
     var productLiveData : MutableLiveData<ProductItemResponse> = MutableLiveData()
     var descriptionLiveData : MutableLiveData<DescriptionResponse> = MutableLiveData()
+    val mediatorLiveData = MediatorLiveData<ProductDetailResponse>()
 
 
     fun getProduct(id: String) : LiveData<ProductDetailResponse>{
 
         ProductItemRepository.getProductItem(id, productLiveData)
         DescriptionRepository.getProductDescription(id,descriptionLiveData)
-
-        val mediatorLiveData = MediatorLiveData<ProductDetailResponse>()
 
         mediatorLiveData.addSource(productLiveData){
             mediatorLiveData.value = combineLatestData(descriptionLiveData, productLiveData)

@@ -3,12 +3,14 @@ package com.example.meliapisdemo
 
 import android.app.SearchManager
 import android.content.Intent
+import android.content.res.Configuration
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import com.example.meliapisdemo.model.product.Product
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.product_item.*
 
 class MainActivity : AppCompatActivity(), SearchFragment.Comunicator {
 
@@ -50,6 +52,7 @@ class MainActivity : AppCompatActivity(), SearchFragment.Comunicator {
         }
         return super.onOptionsItemSelected(item)
     }
+
     override fun sendProduct(product: Product) {
         toolbar.title = "Producto"
         val transaction = supportFragmentManager.beginTransaction()
