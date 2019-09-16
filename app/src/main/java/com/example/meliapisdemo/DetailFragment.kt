@@ -11,15 +11,17 @@ import androidx.lifecycle.ViewModelProviders
 import com.example.meliapisdemo.adapter.PicturePageAdapter
 import com.example.meliapisdemo.model.productItem.*
 import com.example.meliapisdemo.utils.ErrorType
+import com.example.meliapisdemo.utils.InternetUtils
 import com.example.meliapisdemo.viewmodel.ProductItemViewModel
+import com.example.meliapisdemo.viewmodel.ProductViewModel
 import kotlinx.android.synthetic.main.fragment_detail.*
-import kotlinx.android.synthetic.main.fragment_search.*
 import kotlinx.android.synthetic.main.product_item.title
 import java.text.DecimalFormat
 
 class DetailFragment : Fragment() {
 
     private var productItemViewModel = ProductItemViewModel()
+    private var call = true
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
@@ -29,25 +31,52 @@ class DetailFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val id = arguments!!.getString("productId")
-        fetchProductItem(id)
+        if (savedInstanceState != null){
+            val viewModel = savedInstanceState.getBoolean("vmProduct")
+            call = viewModel
+            fetchProductItem(id)
+        }else {
+            fetchProductItem(id)
+        }
     }
 
-    fun fetchProductItem(id: String) {
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putBoolean("vmProduct", call)
+
+    }
+
+    private fun fetchProductItem(id: String) {
         productItemViewModel = ViewModelProviders.of(this).get(ProductItemViewModel::class.java)
-        productItemViewModel.getProduct(id).observe(this, Observer {
-            when (it) {
-                is ProductDetailResponse.Response -> handleResponse(it.productItem, it.description)
-                is ProductDetailResponse.Loading -> handleLoading(it.message)
-                else -> handleLoading("loading data")
-            }
+        val internetUtils = InternetUtils(context!!)
+        internetUtils.observe(this, Observer {
+            if(it && call){
+                call = false
+                productItemViewModel.getProduct(id).observe(this, Observer { productDetail ->
+                    when (productDetail) {
+                        is ProductDetailResponse.Response -> handleResponse(productDetail.productItem, productDetail.description)
+                        is ProductDetailResponse.Loading -> handleLoading(productDetail.message)
+                        else -> handleLoading("loading data")
+                    }
+                })
+            }else if(it){
+                productItemViewModel.mediatorLiveData.observe(this, Observer { productDetail ->
+                    when (productDetail) {
+                        is ProductDetailResponse.Response -> handleResponse(productDetail.productItem, productDetail.description)
+                        is ProductDetailResponse.Loading -> handleLoading(productDetail.message)
+                        else -> handleLoading("loading data")
+                    }
+                })
+            }else if(!it && !call){}
+            else{handleItemError(ErrorType.NETWORK)}
         })
     }
 
-    fun handleLoading(messagge: String) {
+    private fun handleLoading(messagge: String) {
         title.apply { this.text = messagge }
     }
 
-    fun handleResponse(productItem: ProductItemResponse, description: DescriptionResponse) {
+    private fun handleResponse(productItem: ProductItemResponse, description: DescriptionResponse) {
 
         when (productItem) {
             is ProductItemResponse.Success -> handleItemSuccess(productItem.productItem)
@@ -61,7 +90,9 @@ class DetailFragment : Fragment() {
     }
 
 
-    fun handleItemSuccess(productItem: ProductItem) {
+    private fun handleItemSuccess(productItem: ProductItem) {
+        responseDetail.apply { visibility = View.VISIBLE }
+        errorTextDetail.apply { visibility = View.GONE }
         title.apply { this.text = productItem.title }
         viewpager_pictures.apply {
             adapter = PicturePageAdapter(productItem.pictures, context)
@@ -73,11 +104,12 @@ class DetailFragment : Fragment() {
         }
     }
 
-    fun handleDescriptionSuccess(descriptiond: Description) {
+    private fun handleDescriptionSuccess(descriptiond: Description) {
         description.apply { this.text = descriptiond.description }
     }
 
-    fun handleItemError(error: ErrorType) {
+    private fun handleItemError(error: ErrorType) {
+        errorTextDetail.apply { visibility = View.VISIBLE }
         responseDetail.apply { visibility = View.GONE }
         if (error == ErrorType.NETWORK) {
             errorTextDetail.apply {
@@ -110,7 +142,7 @@ class DetailFragment : Fragment() {
         }
     }
 
-    fun handleDescriptionError(errorType: ErrorType) {
+    private fun handleDescriptionError(errorType: ErrorType) {
         description.apply { visibility = View.GONE }
     }
 

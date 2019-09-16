@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.facebook.drawee.view.SimpleDraweeView
         xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:fresco="http://schemas.android.com/apk/res-auto"
+        fresco:actualImageScaleType="fitCenter"
         android:id="@+id/picture_product"
-        android:layout_width="150dp"
-        android:layout_height="250dp"
-        android:layout_gravity="center_horizontal"
-        android:scaleType="fitCenter"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
 />

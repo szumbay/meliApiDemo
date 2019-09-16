@@ -4,12 +4,13 @@ import androidx.lifecycle.*
 import com.example.meliapisdemo.model.productItem.*
 import com.example.meliapisdemo.networking.repos.DescriptionRepository
 import com.example.meliapisdemo.networking.repos.ProductItemRepository
+import java.io.Serializable
 
-class ProductItemViewModel : ViewModel() {
+class ProductItemViewModel : ViewModel(), Serializable{
     var productLiveData : MutableLiveData<ProductItemResponse> = MutableLiveData()
     var descriptionLiveData : MutableLiveData<DescriptionResponse> = MutableLiveData()
-    val mediatorLiveData = MediatorLiveData<ProductDetailResponse>()
 
+    val mediatorLiveData = MediatorLiveData<ProductDetailResponse>()
 
     fun getProduct(id: String) : LiveData<ProductDetailResponse>{
 

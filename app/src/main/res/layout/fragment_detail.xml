@@ -33,8 +33,7 @@
                     android:maxLines="2"
                     android:textColor="#4E4C4C"
                     android:ellipsize="end"
-                    android:textFontWeight="15"
-                    android:text="@string/hello_blank_fragment" />
+                    android:textFontWeight="15"/>
 
             <androidx.viewpager.widget.ViewPager
                     android:id="@+id/viewpager_pictures"

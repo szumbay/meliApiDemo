@@ -6,8 +6,12 @@ import android.content.Intent
 import android.content.res.Configuration
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.PersistableBundle
 import android.view.Menu
 import android.view.MenuItem
+import androidx.appcompat.widget.Toolbar
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentTransaction
 import com.example.meliapisdemo.model.product.Product
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.product_item.*
@@ -18,24 +22,37 @@ class MainActivity : AppCompatActivity(), SearchFragment.Comunicator {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         val lastSearch =  MyApplication.prefs.lastSearch()
-        val toolbar = findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar)
+        val toolbar = findViewById<Toolbar>(R.id.toolbar)
         toolbar.title = lastSearch
         setSupportActionBar(toolbar)
-        supportFragmentManager.popBackStack()
         val transaction = supportFragmentManager.beginTransaction()
-        val fragment = SearchFragment().apply {
-            arguments = Bundle().apply {
-                putString("query",lastSearch)
+        val detailFragment : Fragment?
+
+        if (savedInstanceState != null) {
+            detailFragment = supportFragmentManager.getFragment(savedInstanceState, "lastFragment")
+            if(detailFragment != null){
+                transaction.replace(R.id.content,detailFragment)
+                transaction.commit()
+            }else{
+                fragmentSearch(transaction,lastSearch)
             }
+        }else {
+            fragmentSearch(transaction,lastSearch)
         }
-        transaction.add(R.id.content,fragment)
-        transaction.commit()
     }
 
+    override fun onSaveInstanceState(outState: Bundle?) {
+        super.onSaveInstanceState(outState)
+        val detail = supportFragmentManager.findFragmentByTag("detailFrag")
+        if(detail != null){
+            supportFragmentManager.putFragment(outState!!, "lastFragment", detail)
+        }
+    }
     override fun onBackPressed() {
         super.onBackPressed()
         toolbar.title = MyApplication.prefs.lastSearch()
     }
+
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         val menuInflater = menuInflater
@@ -61,8 +78,8 @@ class MainActivity : AppCompatActivity(), SearchFragment.Comunicator {
                 putString("productId", product.id)
             }
         }
-        transaction.replace(R.id.content, fragment)
-        transaction.addToBackStack("backFragment")
+        transaction.replace(R.id.content, fragment,"detailFrag")
+        transaction.addToBackStack("")
         transaction.commit()
     }
 
@@ -82,8 +99,8 @@ class MainActivity : AppCompatActivity(), SearchFragment.Comunicator {
                         putString("query", query)
                     }
                 }
-                transaction.replace(R.id.content, fragment)
-                transaction.addToBackStack("backFragment")
+                transaction.replace(R.id.content, fragment, "searchMade")
+                transaction.addToBackStack("")
                 transaction.commit()
             }
         }
@@ -97,11 +114,24 @@ class MainActivity : AppCompatActivity(), SearchFragment.Comunicator {
                         putString("query", it)
                     }
                 }
-                transaction.replace(R.id.content, fragment)
-                transaction.addToBackStack("backFragment")
+                transaction.replace(R.id.content, fragment,"searchMadeDialog")
+                transaction.addToBackStack("")
                 transaction.commit()
             }
         }
+    }
+
+    private fun fragmentSearch( transaction : FragmentTransaction, lastSearch: String){
+        var firstFragment = supportFragmentManager.findFragmentByTag("lastSearchFragment")
+        if (firstFragment == null) {
+            firstFragment = SearchFragment().apply {
+                arguments = Bundle().apply {
+                    putString("query", lastSearch)
+                }
+            }
+            transaction.add(R.id.content, firstFragment, "lastSearchFragment")
+        }
+        transaction.commit()
     }
 
 

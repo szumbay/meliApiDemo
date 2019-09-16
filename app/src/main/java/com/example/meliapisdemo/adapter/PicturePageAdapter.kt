@@ -35,22 +35,16 @@ class PicturePageAdapter(private val pictures: List<ProductPicture>, private val
         val view = inflater.inflate(R.layout.product_picture, container, false)
 
         val pic = pictures[position]
-
         val size = pic.getDensityPixel(context.resources.displayMetrics.density.toInt())
+
 
         val image = view.findViewById<SimpleDraweeView>(R.id.picture_product)
         val uri = Uri.parse(pic.pictureS)
-        val request = ImageRequestBuilder.newBuilderWithSource(uri)
-            .setResizeOptions(ResizeOptions(150, 150))
-            .build()
 
         image.apply {
-            controller = Fresco.newDraweeControllerBuilder()
-                .setOldController(image.controller)
-                .setImageRequest(request)
-                .build()
             this.setImageURI(uri)
         }
+
 
         container.addView(view)
 
