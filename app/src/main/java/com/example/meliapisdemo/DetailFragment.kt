@@ -36,7 +36,7 @@ class DetailFragment : Fragment() {
         productItemViewModel = ViewModelProviders.of(this).get(ProductItemViewModel::class.java)
         val internetUtils = InternetLiveData(context!!)
         internetUtils.observe(this, Observer {
-            if(it ){
+            if(it){
                 productItemViewModel.getProduct(id).observe(this, Observer { productDetail ->
                     when (productDetail) {
                         is ProductDetailResponse.Response -> handleResponse(productDetail.productItem, productDetail.description)
@@ -44,7 +44,7 @@ class DetailFragment : Fragment() {
                         else -> handleLoading("loading data")
                     }
                 })
-            }else if(it && productItemViewModel.productLiveData.value != null){ }
+            }else if(!it && productItemViewModel.productLiveData.value != null){ }
             else{handleItemError(ErrorType.NETWORK)}
         })
     }

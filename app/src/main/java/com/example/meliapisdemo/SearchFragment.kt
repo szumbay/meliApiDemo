@@ -48,14 +48,14 @@ class SearchFragment : Fragment(), ProductAdapter.Comunicator {
 
     private fun fetchProducts(query: String) {
         internetLiveData.observe(this, Observer {
-            if (it && products.isEmpty()){
+            if (it){
                 productViewModel.getProductRepository(query).observe(this, Observer { productResponse ->
                     when (productResponse) {
                         is ProductResponse.Success -> handleSuccess(productResponse.productDTO.getProducts())
                         is ProductResponse.Error -> handleException(productResponse.cause)
                     }
                 })
-            }else if(products.isNotEmpty()){handleSuccess(null)}
+            }else if (!it && products.isNotEmpty()){handleSuccess(null)}
             else {handleException(NETWORK)}
         })
     }

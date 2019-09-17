@@ -11,15 +11,21 @@ import androidx.lifecycle.LiveData
 
 class InternetLiveData(val context: Context) : LiveData<Boolean>() {
 
-     val networkReceiver = object : BroadcastReceiver() {
+    private var lastInfo : NetworkInfo.State? = null
+
+    val networkReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
             if (intent.extras != null) {
                 val activeNetwork = intent.extras!!.get(ConnectivityManager.EXTRA_NETWORK_INFO) as NetworkInfo
                 val isConnected = activeNetwork.isConnectedOrConnecting
-                if (isConnected) {
-                    postValue(true)
-                } else {
-                    postValue(false)
+                val state = activeNetwork.state
+                if(lastInfo == null || state != lastInfo){
+                    lastInfo = state
+                    if (isConnected) {
+                        postValue(true)
+                    } else {
+                        postValue(false)
+                    }
                 }
             }
         }
