@@ -7,23 +7,28 @@ import com.example.meliapisdemo.networking.repos.ProductItemRepository
 import java.io.Serializable
 
 class ProductItemViewModel : ViewModel(), Serializable{
+
+    private val repositoryProductItem = ProductItemRepository()
+    private val repositoryDescription = DescriptionRepository()
+
     var productLiveData : MutableLiveData<ProductItemResponse> = MutableLiveData()
     var descriptionLiveData : MutableLiveData<DescriptionResponse> = MutableLiveData()
 
-    val mediatorLiveData = MediatorLiveData<ProductDetailResponse>()
+    private val mediatorLiveData = MediatorLiveData<ProductDetailResponse>()
 
     fun getProduct(id: String) : LiveData<ProductDetailResponse>{
 
-        ProductItemRepository.getProductItem(id, productLiveData)
-        DescriptionRepository.getProductDescription(id,descriptionLiveData)
+        if (mediatorLiveData.value == null){
+            repositoryProductItem.getProductItem(id, productLiveData)
+            repositoryDescription.getProductDescription(id,descriptionLiveData)
 
-        mediatorLiveData.addSource(productLiveData){
-            mediatorLiveData.value = combineLatestData(descriptionLiveData, productLiveData)
+            mediatorLiveData.addSource(productLiveData){
+                mediatorLiveData.value = combineLatestData(descriptionLiveData, productLiveData)
+            }
+            mediatorLiveData.addSource(descriptionLiveData){
+                mediatorLiveData.value = combineLatestData(descriptionLiveData, productLiveData)
+            }
         }
-        mediatorLiveData.addSource(descriptionLiveData){
-            mediatorLiveData.value = combineLatestData(descriptionLiveData, productLiveData)
-        }
-
         return mediatorLiveData
     }
 

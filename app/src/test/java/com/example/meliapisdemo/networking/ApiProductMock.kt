@@ -2,6 +2,9 @@ package com.example.meliapisdemo.networking
 
 import com.example.meliapisdemo.model.product.Product
 import com.example.meliapisdemo.model.product.ProductDTO
+import com.example.meliapisdemo.model.productItem.Description
+import com.example.meliapisdemo.model.productItem.ProductItem
+import com.example.meliapisdemo.model.suggestion.SuggestionDTO
 import com.example.meliapisdemo.networking.api.ProductApi
 import okhttp3.MediaType
 import okhttp3.Request
@@ -13,7 +16,15 @@ import java.io.IOException
 
 class ApiProductMock(private val success: Boolean,
                      private val validRequest: Boolean) : ProductApi {
-    override fun getSuggestionList(suggestion: String) {
+    override fun getProduct(id: String): Call<ProductItem> {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun getProductDescription(id: String): Call<Description> {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun getSuggestionList(suggestion: String): Call<SuggestionDTO> {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 

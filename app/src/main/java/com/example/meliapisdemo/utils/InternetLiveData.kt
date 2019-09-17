@@ -9,9 +9,9 @@ import android.content.IntentFilter
 import androidx.lifecycle.LiveData
 
 
-class InternetUtils(val context: Context) : LiveData<Boolean>() {
+class InternetLiveData(val context: Context) : LiveData<Boolean>() {
 
-    private val networkReceiver = object : BroadcastReceiver() {
+     val networkReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
             if (intent.extras != null) {
                 val activeNetwork = intent.extras!!.get(ConnectivityManager.EXTRA_NETWORK_INFO) as NetworkInfo

@@ -11,9 +11,8 @@ import androidx.lifecycle.ViewModelProviders
 import com.example.meliapisdemo.adapter.PicturePageAdapter
 import com.example.meliapisdemo.model.productItem.*
 import com.example.meliapisdemo.utils.ErrorType
-import com.example.meliapisdemo.utils.InternetUtils
+import com.example.meliapisdemo.utils.InternetLiveData
 import com.example.meliapisdemo.viewmodel.ProductItemViewModel
-import com.example.meliapisdemo.viewmodel.ProductViewModel
 import kotlinx.android.synthetic.main.fragment_detail.*
 import kotlinx.android.synthetic.main.product_item.title
 import java.text.DecimalFormat
@@ -21,7 +20,6 @@ import java.text.DecimalFormat
 class DetailFragment : Fragment() {
 
     private var productItemViewModel = ProductItemViewModel()
-    private var call = true
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
@@ -31,27 +29,14 @@ class DetailFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val id = arguments!!.getString("productId")
-        if (savedInstanceState != null){
-            val viewModel = savedInstanceState.getBoolean("vmProduct")
-            call = viewModel
-            fetchProductItem(id)
-        }else {
-            fetchProductItem(id)
-        }
-    }
-
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        outState.putBoolean("vmProduct", call)
-
+        fetchProductItem(id)
     }
 
     private fun fetchProductItem(id: String) {
         productItemViewModel = ViewModelProviders.of(this).get(ProductItemViewModel::class.java)
-        val internetUtils = InternetUtils(context!!)
+        val internetUtils = InternetLiveData(context!!)
         internetUtils.observe(this, Observer {
-            if(it && call){
-                call = false
+            if(it ){
                 productItemViewModel.getProduct(id).observe(this, Observer { productDetail ->
                     when (productDetail) {
                         is ProductDetailResponse.Response -> handleResponse(productDetail.productItem, productDetail.description)
@@ -59,15 +44,7 @@ class DetailFragment : Fragment() {
                         else -> handleLoading("loading data")
                     }
                 })
-            }else if(it){
-                productItemViewModel.mediatorLiveData.observe(this, Observer { productDetail ->
-                    when (productDetail) {
-                        is ProductDetailResponse.Response -> handleResponse(productDetail.productItem, productDetail.description)
-                        is ProductDetailResponse.Loading -> handleLoading(productDetail.message)
-                        else -> handleLoading("loading data")
-                    }
-                })
-            }else if(!it && !call){}
+            }else if(it && productItemViewModel.productLiveData.value != null){ }
             else{handleItemError(ErrorType.NETWORK)}
         })
     }
@@ -117,7 +94,6 @@ class DetailFragment : Fragment() {
                 val drawable = resources.getDrawable(R.drawable.error)
                 setCompoundDrawablesWithIntrinsicBounds(null, drawable,null, null)
             }
-
         }
         else if (error == ErrorType.CLIENT){
             errorTextDetail.apply {

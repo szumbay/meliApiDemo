@@ -10,7 +10,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-object ProductItemRepository {
+class ProductItemRepository {
 
     var productApi = RetrofitService()
         .createService(ProductApi::class.java)

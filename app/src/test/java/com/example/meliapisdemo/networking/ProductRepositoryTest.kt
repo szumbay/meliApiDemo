@@ -23,10 +23,12 @@ class ProductRepositoryTest {
         val mockRetrofitService = Mockito.spy(RetrofitService())
         Mockito.`when`(mockRetrofitService .createService(ProductApi::class.java)).thenReturn(ApiProductMock(true,true))
 
-        ProductRepository.productApi = mockRetrofitService.createService(ProductApi::class.java)
+        val repository = ProductRepository()
+
+        repository.productApi = mockRetrofitService.createService(ProductApi::class.java)
 
         val productResponseLiveData = MutableLiveData<ProductResponse>()
-        ProductRepository.getProducts("iphone",productResponseLiveData)
+        repository.getProducts("iphone",productResponseLiveData)
 
         Assert.assertEquals(ProductResponse.Success::class.java, productResponseLiveData.value!!::class.java)
     }
@@ -36,9 +38,11 @@ class ProductRepositoryTest {
         val mockRetrofitService = Mockito.spy(RetrofitService())
         Mockito.`when`(mockRetrofitService .createService(ProductApi::class.java)).thenReturn(ApiProductMock(true,false))
 
-        ProductRepository.productApi = mockRetrofitService.createService(ProductApi::class.java)
+        val repository = ProductRepository()
+
+        repository.productApi = mockRetrofitService.createService(ProductApi::class.java)
         val productResponseLiveData = MutableLiveData<ProductResponse>()
-        ProductRepository.getProducts("iphone",productResponseLiveData)
+        repository.getProducts("iphone",productResponseLiveData)
         var errorType = ErrorType.CANCELED
         productResponseLiveData.value?.apply {
             when(this){
@@ -53,9 +57,11 @@ class ProductRepositoryTest {
         val mockRetrofitService = Mockito.spy(RetrofitService())
         Mockito.`when`(mockRetrofitService .createService(ProductApi::class.java)).thenReturn(ApiProductMock(false,false))
 
-        ProductRepository.productApi = mockRetrofitService.createService(ProductApi::class.java)
+        val repository = ProductRepository()
+
+        repository.productApi = mockRetrofitService.createService(ProductApi::class.java)
         val productResponseLiveData = MutableLiveData<ProductResponse>()
-        ProductRepository.getProducts("iphone",productResponseLiveData)
+        repository.getProducts("iphone",productResponseLiveData)
         var errorType = ErrorType.CANCELED
         productResponseLiveData.value?.apply {
             when(this){
@@ -69,9 +75,11 @@ class ProductRepositoryTest {
         val mockRetrofitService = Mockito.spy(RetrofitService())
         Mockito.`when`(mockRetrofitService .createService(ProductApi::class.java)).thenReturn(ApiProductMock(false,true))
 
-        ProductRepository.productApi = mockRetrofitService.createService(ProductApi::class.java)
+        val repository = ProductRepository()
+
+        repository.productApi = mockRetrofitService.createService(ProductApi::class.java)
         val productResponseLiveData = MutableLiveData<ProductResponse>()
-        ProductRepository.getProducts("iphone",productResponseLiveData)
+        repository.getProducts("iphone",productResponseLiveData)
         var errorType = ErrorType.CANCELED
         productResponseLiveData.value?.apply {
             when(this){

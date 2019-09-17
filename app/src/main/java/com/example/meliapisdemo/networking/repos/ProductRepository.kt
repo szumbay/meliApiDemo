@@ -11,14 +11,14 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-object ProductRepository {
+class ProductRepository {
 
     var productApi = RetrofitService()
         .createService(ProductApi::class.java)
 
-    fun getProducts(search: String, productLiveData: MutableLiveData<ProductResponse>){
+    fun getProducts(search: String, productLiveData: MutableLiveData<ProductResponse>) {
 
-        productApi.getProductList(search).enqueue(object : Callback<ProductDTO>{
+        productApi.getProductList(search).enqueue(object : Callback<ProductDTO> {
 
             override fun onFailure(call: Call<ProductDTO>, t: Throwable) {
                 val errorType = getErrorType(t)
@@ -26,13 +26,11 @@ object ProductRepository {
             }
 
             override fun onResponse(call: Call<ProductDTO>, DTO: Response<ProductDTO>) {
-                if (DTO.isSuccessful && DTO.body()?.getProducts()!!.isNotEmpty()){
+                if (DTO.isSuccessful && DTO.body()?.getProducts()!!.isNotEmpty()) {
                     productLiveData.postValue(ProductResponse.Success(DTO.body()!!))
-                }
-                else if (DTO.isSuccessful && DTO.body()?.getProducts()!!.isEmpty()) {
+                } else if (DTO.isSuccessful && DTO.body()?.getProducts()!!.isEmpty()) {
                     productLiveData.postValue(ProductResponse.Error(ErrorType.CLIENT))
-                }
-                else
+                } else
                     productLiveData.postValue(ProductResponse.Error(getErrorType(DTO.code())))
             }
         })
